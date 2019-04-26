@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
+// import { HttpClientModule } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
 import { NavComponent } from './nav/nav.component';
@@ -11,6 +11,8 @@ import { VehiclesComponent } from './vehicles/vehicles.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { JwtModule } from "@auth0/angular-jwt";
 import { LoginComponent } from './login/login.component';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { IntreceptTokenService } from './intrecept-token.service';
 
 export function tokenGetter(){
   return localStorage.getItem('access_token');
@@ -37,7 +39,12 @@ export function tokenGetter(){
       }
     })
   ],
-  providers: [],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: IntreceptTokenService,
+      multi: true
+    }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
